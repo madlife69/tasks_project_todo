@@ -2,7 +2,9 @@ package com.example.tasks_project.di
 
 import android.app.Application
 import android.content.pm.ApplicationInfo
+import androidx.room.Room
 import com.example.tasks_project.data.TaskDatabase
+import com.google.android.datatransport.runtime.dagger.Component
 import com.google.android.datatransport.runtime.dagger.Module
 import com.google.android.datatransport.runtime.dagger.Provides
 import kotlinx.coroutines.CoroutineScope
@@ -12,8 +14,7 @@ import javax.inject.Singleton
 
 
 @Module
-@InstallIn(ApplicationComponent::class)
-
+@Component
 object AppModule {
     @Provides
     @Singleton
@@ -21,10 +22,10 @@ object AppModule {
         app: Application,
         callback: TaskDatabase.Callback
 
-    )=Room.databasebuilder(app,TaskDatabase::class.java,"task_database")
+    )= Room.databaseBuilder(app,TaskDatabase::class.java,"task_database")
         .fallbackToDestructiveMigration()
         .addCallback(callback)
-        .build
+        .build()
     @Provides
     fun provideTaskDao(db: TaskDatabase) = db.taskDao()
 
